@@ -49,6 +49,7 @@ export class TimelineComponent implements OnInit {
   prevClick(): void {
     if(this.timelineMarginRight !== 0) {
       this.timelineMarginRight += this.widthColumn;
+      console.log();
     }
   }
 
