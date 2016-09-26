@@ -1,0 +1,10 @@
+.timeline {
+  overflow: hidden; }
+
+.timeline .table {
+  table-layout: fixed; }
+
+.timeline .table td {
+  overflow: hidden; }
+
+/*# sourceMappingURL=timeline.component.css.map */
