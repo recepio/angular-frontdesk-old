@@ -53198,40 +53198,62 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var TimelineComponent = (function () {
     function TimelineComponent() {
-        this.days = [];
-        this.rooms = [];
-        this.qtyDays = 15;
-        this.timelineMarginRight = 0;
+        this.days = []; // arr for days
+        this.rooms = []; // arr for rooms
+        this.widthDay = 15; // width day col
+        this.timelineMarginRight = 0; // save margin
+        this.nextButtonClick = 0; // counter clicks
+        this.disableButton = 'disabled';
+        this.indexOfLastArrElement = 0;
         this.today = new Date();
         this.createDays();
         this.createRooms();
+        this.nextMonth = new Date(this.today.getFullYear(), this.today.getMonth() + 1);
+        this.prevMonth = new Date(this.today);
     }
     TimelineComponent.prototype.ngOnInit = function () {
         var timeLineWidth = document.querySelector('.timeline').clientWidth;
-        this.widthColumn = timeLineWidth / this.qtyDays;
+        this.widthColumn = timeLineWidth / this.widthDay;
+        this.timelineMarginRight = this.widthColumn;
+        this.widthColumn = +this.widthColumn.toFixed();
     };
+    // create mocks days
     TimelineComponent.prototype.createDays = function () {
         var today = new Date();
         today.setDate(today.getDate() - 5);
-        for (var i = 1; i < this.qtyDays; i++) {
+        for (var i = 1; i < this.widthDay; i++) {
             this.days.push(today.setDate(today.getDate() + 1));
         }
     };
+    // create mocks rooms
     TimelineComponent.prototype.createRooms = function () {
         for (var i = 1; i < 170; i++) {
             this.rooms.push(i);
         }
     };
-    TimelineComponent.prototype.nextClick = function () {
+    TimelineComponent.prototype.timelineButtonClick = function (typeOfClick) {
         var lastDay = new Date(this.days[this.days.length - 1]);
-        this.days.push(lastDay.setDate(lastDay.getDate() + 1));
-        this.timelineMarginRight += -this.widthColumn;
-    };
-    TimelineComponent.prototype.prevClick = function () {
-        if (this.timelineMarginRight !== 0) {
-            this.timelineMarginRight += this.widthColumn;
-            console.log();
+        if (typeOfClick === 'nextClick') {
+            this.days.push(lastDay.setDate(lastDay.getDate() + 1));
+            this.timelineMarginRight += -this.widthColumn;
+            this.nextButtonClick++;
+            this.disableButton = '';
         }
+        if (typeOfClick === 'prevClick') {
+            if (this.nextButtonClick !== 0) {
+                this.timelineMarginRight += this.widthColumn;
+                this.nextButtonClick--;
+                this.indexOfLastArrElement++;
+            }
+            else {
+                this.disableButton = 'disabled';
+                this.timelineMarginRight = this.widthColumn;
+            }
+        }
+        var lastDayonView = new Date(this.days[this.days.length - (1 + this.indexOfLastArrElement)]);
+        this.prevMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth() - 1);
+        this.nextMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth());
+        //console.log(lastDayonView);
     };
     TimelineComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["G" /* Component */])({
@@ -56323,13 +56345,13 @@ process.umask = function() { return 0; };
 /* 599 */
 /***/ function(module, exports) {
 
-module.exports = ""
+module.exports = "\n"
 
 /***/ },
 /* 600 */
 /***/ function(module, exports) {
 
-module.exports = ".timeline {\n  overflow: hidden; }\n\n.timeline .table {\n  table-layout: fixed; }\n\n.timeline .table td {\n  overflow: hidden; }\n"
+module.exports = ".timeline {\n  overflow: hidden; }\n\n.timeline .table {\n  table-layout: fixed; }\n\n.timeline .table td {\n  overflow: hidden; }\n\n.timeline .room-fixed {\n  background-color: #fff;\n  position: absolute;\n  left: 0;\n  z-index: 9999;\n  border: none;\n  vertical-align: middle;\n  min-height: 90px; }\n\n.absolute {\n  position: absolute; }\n"
 
 /***/ },
 /* 601 */,
@@ -56342,7 +56364,7 @@ module.exports = "<h1>\n  {{title}}\n</h1>\n<app-timeline></app-timeline>\n"
 /* 603 */
 /***/ function(module, exports) {
 
-module.exports = "<p>\n  timeline works!\n</p>\n<p>\n  {{today}}\n</p>\n\n<div class=\"container-fluid timeline\">\n  <div class=\"row\">\n    <button type=\"button\" (click)=\"prevClick()\"\n            class=\"btn btn-outline-primary pull-left\"><i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i></button>\n    <button type=\"button\" (click)=\"nextClick()\"\n            class=\"btn btn-outline-primary pull-right\"><i class=\"fa fa-chevron-right\" aria-hidden=\"true\"></i></button>\n    <table class=\"table table-bordered\" [style.marginLeft.px]=\"timelineMarginRight\">\n      <thead>\n      <tr>\n        <th [style.width.px]=\"widthColumn\">room id</th>\n        <th *ngFor=\"let day of days\" [style.width.px]=\"widthColumn\">{{day | date}}</th>\n      </tr>\n      <tr *ngFor=\"let room of rooms\">\n        <td>{{room}}</td>\n        <td *ngFor=\"let day of days\">{{day}}</td>\n      </tr>\n      </thead>\n    </table>\n  </div>\n</div>\n"
+module.exports = "<p>\n  timeline works!\n</p>\n<p>\n  {{today}}\n</p>\n\n<div class=\"container-fluid timeline\">\n  <div class=\"row\">\n    <div class=\"filter-row\">\n\n      <button type=\"button\" (click)=\"timelineButtonClick('prevClick')\"\n              class=\"btn btn-outline-primary pull-left {{disableButton}}\">\n        <i class=\"fa fa-chevron-left\" aria-hidden=\"true\"></i>\n      </button>\n      <span>{{prevMonth | date:\"MMM, yyyy\"}}</span>\n      <button type=\"button\" (click)=\"timelineButtonClick('nextClick')\"\n              class=\"btn btn-outline-primary pull-right\"><i class=\"fa fa-chevron-right\" aria-hidden=\"true\"></i></button>\n      <span class=\"pull-right\">{{nextMonth | date:\"MMM, yyyy\"}}</span>\n\n    </div>\n\n    <table class=\"table table-bordered\" [style.marginLeft.px]=\"timelineMarginRight\">\n      <thead>\n      <tr>\n        <th class=\"room-fixed\" [style.width.px]=\"widthColumn\">room id</th>\n        <th *ngFor=\"let day of days; let i = index;\" [style.width.px]=\"widthColumn\">{{day | date}}</th>\n      </tr>\n      <tr *ngFor=\"let room of rooms\">\n        <td class=\"room-fixed\" [style.width.px]=\"widthColumn\">{{room}}</td>\n        <td *ngFor=\"let day of days\" >{{day}}</td>\n      </tr>\n      </thead>\n    </table>\n\n  </div>\n</div>\n"
 
 /***/ },
 /* 604 */
