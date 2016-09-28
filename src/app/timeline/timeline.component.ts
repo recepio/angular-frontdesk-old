@@ -40,7 +40,7 @@ export class TimelineComponent implements OnInit {
   createDays(): void {
     let today: Date = new Date();
     today.setDate(today.getDate() - 5);
-    for (let i = 1; i < this.widthDay; i++) {
+    for (let i = 1; i <= this.widthDay; i++) {
       this.days.push(today.setDate(today.getDate() + 1));
     }
   }
@@ -76,7 +76,7 @@ export class TimelineComponent implements OnInit {
       }
     }
 
-    let lastDayonView = new Date(this.days[this.days.length - (1 + this.indexOfLastArrElement)]);
+    let lastDayonView = new Date(this.days[this.days.length - (2 + this.indexOfLastArrElement)]);
 
     this.prevMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth() - 1);
     this.nextMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth());
