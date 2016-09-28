@@ -10,3 +10,18 @@
   overflow: hidden;
 }
 
+.timeline .room-fixed{
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  z-index: 9999;
+  border: none;
+  vertical-align: middle;
+  min-height: 90px;
+}
+
+.absolute {
+  position: absolute;
+}
+
+

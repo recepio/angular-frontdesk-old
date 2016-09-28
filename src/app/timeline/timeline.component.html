@@ -7,21 +7,31 @@
 
 <div class="container-fluid timeline">
   <div class="row">
-    <button type="button" (click)="prevClick()"
-            class="btn btn-outline-primary pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-    <button type="button" (click)="nextClick()"
-            class="btn btn-outline-primary pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+    <div class="filter-row">
+
+      <button type="button" (click)="timelineButtonClick('prevClick')"
+              class="btn btn-outline-primary pull-left {{disableButton}}">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <span>{{prevMonth | date:"MMM, yyyy"}}</span>
+      <button type="button" (click)="timelineButtonClick('nextClick')"
+              class="btn btn-outline-primary pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+      <span class="pull-right">{{nextMonth | date:"MMM, yyyy"}}</span>
+
+    </div>
+
     <table class="table table-bordered" [style.marginLeft.px]="timelineMarginRight">
       <thead>
       <tr>
-        <th [style.width.px]="widthColumn">room id</th>
-        <th *ngFor="let day of days" [style.width.px]="widthColumn">{{day | date}}</th>
+        <th class="room-fixed" [style.width.px]="widthColumn">room id</th>
+        <th *ngFor="let day of days; let i = index;" [style.width.px]="widthColumn">{{day | date}}</th>
       </tr>
       <tr *ngFor="let room of rooms">
-        <td>{{room}}</td>
-        <td *ngFor="let day of days">{{day}}</td>
+        <td class="room-fixed" [style.width.px]="widthColumn">{{room}}</td>
+        <td *ngFor="let day of days" >{{day}}</td>
       </tr>
       </thead>
     </table>
+
   </div>
 </div>
