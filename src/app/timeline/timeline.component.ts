@@ -90,8 +90,6 @@ export class TimelineComponent implements OnInit {
 
     this.prevMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth() - 1);
     this.nextMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth());
-    //console.log(lastDayonView);
-
   }
 
 }
