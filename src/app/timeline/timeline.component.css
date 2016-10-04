@@ -7,16 +7,22 @@
 .timeline .table td {
   overflow: hidden; }
 
+.timeline .table td:not(.room-fixed):hover {
+  cursor: pointer;
+  opacity: 0.7;
+  background-color: #eceeef; }
+
 .timeline .room-fixed {
   background-color: #fff;
-  position: absolute;
   left: 0;
   z-index: 9999;
   border: none;
-  vertical-align: middle;
-  min-height: 90px; }
+  border-right: 1px solid #eceeef; }
 
 .absolute {
   position: absolute; }
+
+.timeline .table {
+  transition: all 0.2s ease; }
 
 /*# sourceMappingURL=timeline.component.css.map */

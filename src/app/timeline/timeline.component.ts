@@ -25,29 +25,37 @@ export class TimelineComponent implements OnInit {
     this.today = new Date();
     this.createDays();
     this.createRooms();
+
     this.nextMonth = new Date(this.today.getFullYear(), this.today.getMonth() + 1);
     this.prevMonth = new Date(this.today);
+
   }
 
   ngOnInit(): void {
-    let timeLineWidth: number = document.querySelector('.timeline').clientWidth;
+    let timeLineWidth: number = document.body.offsetWidth;
     this.widthColumn = timeLineWidth / this.widthDay;
-    this.timelineMarginRight = this.widthColumn;
-    this.widthColumn = +this.widthColumn.toFixed();
+    this.widthColumn = +this.widthColumn.toFixed(2);
+    //this.timelineMarginRight = -this.widthColumn;
+
+  }
+
+  ngAfterViewInit() {
+    // Component views are initialized
+    Array.from(document.body.querySelectorAll('.room-fixed')).forEach((item:HTMLElement) => item.style.position = 'absolute');
   }
 
   // create mocks days
   createDays(): void {
     let today: Date = new Date();
     today.setDate(today.getDate() - 5);
-    for (let i = 1; i <= this.widthDay; i++) {
+    for (let i = 0; i < this.widthDay; i++) {
       this.days.push(today.setDate(today.getDate() + 1));
     }
   }
 
   // create mocks rooms
   createRooms(): void {
-    for (let i = 1; i < 170; i++) {
+    for (let i = 1; i < 50; i++) {
       this.rooms.push(i);
     }
   }
@@ -63,6 +71,7 @@ export class TimelineComponent implements OnInit {
       this.timelineMarginRight += -this.widthColumn;
       this.nextButtonClick++;
       this.disableButton = '';
+
     }
 
     if (typeOfClick === 'prevClick') {
@@ -76,6 +85,7 @@ export class TimelineComponent implements OnInit {
       }
     }
 
+    // 2 - this is FIXME
     let lastDayonView = new Date(this.days[this.days.length - (2 + this.indexOfLastArrElement)]);
 
     this.prevMonth = new Date(lastDayonView.getFullYear(), lastDayonView.getMonth() - 1);
